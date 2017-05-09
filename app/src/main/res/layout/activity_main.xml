@@ -1,32 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.krit.termproject.MainActivity">
+    android:background="@drawable/splashbackground"
+    tools:context="com.example.krit.termproject.MainActivity"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <EditText
-            android:id="@+id/editText_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="ID"/>
-        <EditText
-            android:id="@+id/editText_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:inputType="textPassword"/>
-        <Button
-            android:id="@+id/button_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Login"/>
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/splashlogo"
+        android:layout_width="67dp"
+        android:layout_height="74dp"
+        app:srcCompat="@drawable/splashlogo"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_editor_absoluteY="125dp"/>
+
+    <EditText
+        android:id="@+id/editText_username"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editText_password"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/corner_round"
+        android:hint="Username"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:textAlignment="center"
+        tools:layout_editor_absoluteY="255dp"
+        tools:layout_editor_absoluteX="42dp" />
+
+    <EditText
+        android:id="@+id/editText_password"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_login"
+        android:layout_alignEnd="@+id/button_login"
+        android:layout_alignRight="@+id/button_login"
+        android:background="@drawable/corner_round"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:textAlignment="center"
+        tools:layout_editor_absoluteY="297dp"
+        tools:layout_editor_absoluteX="42dp" />
+
+    <Button
+        android:id="@+id/button_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:text="Login"
+        android:textColor="@android:color/white"
+        tools:layout_editor_absoluteY="329dp"
+        tools:layout_editor_absoluteX="148dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Iris Messenger"
+        android:textColor="@android:color/white"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteY="201dp"
+        tools:layout_editor_absoluteX="94dp" />
 
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
