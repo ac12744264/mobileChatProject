@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +35,8 @@ public class ChatActivity extends AppCompatActivity {
     ArrayList<String> arrayList = new ArrayList<>();
     HashMap<String,String> hashMap_getMsg;
     HashMap<String,String> hashMap_postMsg;
+
+    ChatArrayAdapter chatArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +128,10 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+            chatArrayAdapter = new ChatArrayAdapter(ChatActivity.this, R.layout.activity_chat_singlemessage);
+            listView.setAdapter(chatArrayAdapter);
+
             try {
                 jsonArrayChatAll = jsonObject.getJSONArray("content");
                 for(int i = 0; i < jsonArrayChatAll.length(); i++){
@@ -134,18 +141,29 @@ public class ChatActivity extends AppCompatActivity {
                     String to = jsonObject.getString("to");
                     String message = jsonObject.getString("message");
                     String datetime = jsonObject.getString("datetime");
-                    if((from.equals(username) && to.equals(friend))||
-                            (from.equals(friend)&&to.equals(username))){
-                        jsonArray.put(jsonObject);
-                        arrayList.add(from+" : "+message);
+//                    if((from.equals(username) && to.equals(friend))||
+//                            (from.equals(friend)&&to.equals(username))){
+//                        jsonArray.put(jsonObject);
+//                        arrayList.add(from+" : "+message);
+//                    }
+                    if(from.equals(username) && to.equals(friend)){
+                        chatArrayAdapter.add(new ChatMessage(false,message));
+                    }
+                    else if(from.equals(friend) && to.equals(username)){
+                        chatArrayAdapter.add(new ChatMessage(true,message));
                     }
                 }
                 Log.d("check",jsonArray.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(ChatActivity.this,android.R.layout.simple_list_item_1,arrayList);
-            listView.setAdapter(adapter);
+
+            listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+            listView.setAdapter(chatArrayAdapter);
+
+
+//            ArrayAdapter<String> adapter = new ArrayAdapter<String>(ChatActivity.this,android.R.layout.simple_list_item_1,arrayList);
+//            listView.setAdapter(adapter);
         }
     }
 }
