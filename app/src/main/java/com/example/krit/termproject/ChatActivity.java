@@ -2,6 +2,7 @@ package com.example.krit.termproject;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +44,15 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         init();
+        new CountDownTimer(90000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                init();
+            }
+
+            public void onFinish() {
+                init();
+            }
+        }.start();
     }
 
     public void init(){
