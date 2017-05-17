@@ -29,7 +29,8 @@
         android:layout_marginBottom="11dp"
         android:layout_above="@+id/editText_password"
         android:layout_alignLeft="@+id/editText_password"
-        android:layout_alignStart="@+id/editText_password" />
+        android:layout_alignStart="@+id/editText_password"
+        android:textCursorDrawable="@drawable/color_cursor" />
 
     <EditText
         android:id="@+id/editText_password"
@@ -43,7 +44,8 @@
         android:textAlignment="center"
         android:layout_marginBottom="12dp"
         android:layout_above="@+id/button_login"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textCursorDrawable="@drawable/color_cursor" />
 
     <Button
         android:id="@+id/button_login"
