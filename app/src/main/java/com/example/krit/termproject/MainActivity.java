@@ -2,6 +2,7 @@ package com.example.krit.termproject;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.text.LocaleDisplayNames;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_main);
-        init();
+        begin();
+
         if(pref.getString("username",null) != null){
             startActivity(new Intent(MainActivity.this,ContactActivity.class));
         }
@@ -47,12 +49,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         setContentView(R.layout.activity_main);
-        init();
-        editor.clear();
-        editor.commit();
+        begin();
     }
 
-    private void init(){
+    public void begin(){
         pref = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE);
         editor = pref.edit();
         editText_username = (EditText) findViewById(R.id.editText_username);
@@ -64,19 +64,23 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 hashMap.put("username", editText_username.getText().toString());
                 hashMap.put("password",editText_password.getText().toString());
-                Retriever retriever = new Retriever();
-                retriever.execute();
+                Signin signin = new Signin();
+                signin.execute();
             }
         });
+        editor.clear();
+        editor.commit();
     }
 
-    private class Retriever extends AsyncTask<Void,Void,Void>{
+    private class Signin extends AsyncTask<Void,Void,Void>{
 
         @Override
         protected Void doInBackground(Void... params) {
             OkHttpHelper httpHelper = new OkHttpHelper();
             try {
+                Log.d("test","aaa");
                 text = httpHelper.POST("https://mis.cp.eng.chula.ac.th/mobile/service.php?q=api/signIn",hashMap);
+                Log.d("test",text);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -100,14 +104,11 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this,ContactActivity.class);
                     String session = jsonObject.getString("content");
                     Log.d("session",session);
-//                    intent.putExtra("session",session);
-//                    intent.putExtra("username",editText_username.getText().toString());
                     editor.putString("session",session);
                     editor.putString("username",editText_username.getText().toString());
                     editor.commit();
 
                     startActivity(intent);
-
 
                 }
                 else {

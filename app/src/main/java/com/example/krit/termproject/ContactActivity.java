@@ -36,39 +36,33 @@ public class ContactActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
-        init();
+        begin();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         setContentView(R.layout.activity_contact);
-        init();
+        begin();
     }
 
-    private void init(){
+    private void begin(){
         hashMap = new HashMap<>();
         arrayList = new ArrayList<>();
         addButton = (Button) findViewById(R.id.addButton);
         listView = (ListView) findViewById(R.id.list);
-//        Intent intent = getIntent();
-//        session = intent.getStringExtra("session");
-//        username = intent.getStringExtra("username");
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
         session = pref.getString("session",null);
         username = pref.getString("username",null);
 
         hashMap.put("sessionid",session);
-        Retriever retriever = new Retriever();
-        retriever.execute();
+        GetContact getContact = new GetContact();
+        getContact.execute();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ContactActivity.this,SearchActivity.class);
-                intent.putExtra("session",session);
-                intent.putExtra("username",username);
                 startActivity(intent);
             }
         });
@@ -77,15 +71,13 @@ public class ContactActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent (ContactActivity.this,ChatActivity.class);
-                intent.putExtra("session",session);
-                intent.putExtra("username",username);
                 intent.putExtra("friend",arrayList.get(position));
                 startActivity(intent);
             }
         });
     }
 
-    public class Retriever extends AsyncTask<Void,Void,Void>{
+    public class GetContact extends AsyncTask<Void,Void,Void>{
 
         @Override
         protected Void doInBackground(Void... params) {

@@ -1,6 +1,7 @@
 package com.example.krit.termproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,9 +45,9 @@ public class SearchActivity extends AppCompatActivity {
         input_searchname = (EditText) findViewById(R.id.input_searchname);
         search_button = (Button) findViewById(R.id.searchbutton);
         listView = (ListView) findViewById(R.id.searchList);
-        Intent intent = getIntent();
-        session = intent.getStringExtra("session");
-        username = intent.getStringExtra("username");
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE);
+        session = pref.getString("session",null);
+        username = pref.getString("username",null);
 
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override

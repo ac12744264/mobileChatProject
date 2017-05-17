@@ -1,6 +1,7 @@
 package com.example.krit.termproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -43,26 +44,29 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        init();
+        begin();
         new CountDownTimer(90000, 1000) {
             public void onTick(long millisUntilFinished) {
-                init();
+                begin();
             }
 
             public void onFinish() {
-                init();
+                begin();
             }
         }.start();
     }
 
-    public void init(){
+    public void begin(){
         arrayList = new ArrayList<>();
         hashMap_getMsg = new HashMap<>();
         hashMap_postMsg = new HashMap<>();
         Intent intent = getIntent();
-        session = intent.getStringExtra("session");
-        username = intent.getStringExtra("username");
         friend = intent.getStringExtra("friend");
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE);
+        session = pref.getString("session",null);
+        username = pref.getString("username",null);
+
         chatSendButton = (Button) findViewById(R.id.chatSendButton);
         messageEdit = (EditText) findViewById(R.id.messageEdit);
         listView = (ListView) findViewById(R.id.messageContainer);
@@ -74,23 +78,22 @@ public class ChatActivity extends AppCompatActivity {
         hashMap_getMsg.put("seqno","0");
         hashMap_getMsg.put("limit","1000");
 
-        Retriever_getMsg retriever_getMsg = new Retriever_getMsg();
-        retriever_getMsg.execute();
+        GetMessage getMessage = new GetMessage();
+        getMessage.execute();
 
         chatSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                hashMap_postMsg = new HashMap<>();
                 hashMap_postMsg.put("sessionid",session);
                 hashMap_postMsg.put("targetname",friend);
                 hashMap_postMsg.put("message",messageEdit.getText().toString());
-                Retriever_postMsg retriever_postMsg = new Retriever_postMsg();
-                retriever_postMsg.execute();
+                PostMessage postMessage = new PostMessage();
+                postMessage.execute();
             }
         });
     }
 
-    private class Retriever_postMsg extends AsyncTask<Void,Void,Void>{
+    private class PostMessage extends AsyncTask<Void,Void,Void>{
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -111,13 +114,13 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            init();
+            begin();
             messageEdit.setText(null);
         }
     }
 
 
-    private class Retriever_getMsg extends AsyncTask<Void,Void,Void>{
+    private class GetMessage extends AsyncTask<Void,Void,Void>{
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -146,16 +149,9 @@ public class ChatActivity extends AppCompatActivity {
                 jsonArrayChatAll = jsonObject.getJSONArray("content");
                 for(int i = 0; i < jsonArrayChatAll.length(); i++){
                     jsonObject = jsonArrayChatAll.getJSONObject(i);
-                    String segno = jsonObject.getString("seqno");
                     String from =jsonObject.getString("from");
                     String to = jsonObject.getString("to");
                     String message = jsonObject.getString("message");
-                    String datetime = jsonObject.getString("datetime");
-//                    if((from.equals(username) && to.equals(friend))||
-//                            (from.equals(friend)&&to.equals(username))){
-//                        jsonArray.put(jsonObject);
-//                        arrayList.add(from+" : "+message);
-//                    }
                     if(from.equals(username) && to.equals(friend)){
                         chatArrayAdapter.add(new ChatMessage(false,message));
                     }
@@ -171,9 +167,6 @@ public class ChatActivity extends AppCompatActivity {
             listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
             listView.setAdapter(chatArrayAdapter);
 
-
-//            ArrayAdapter<String> adapter = new ArrayAdapter<String>(ChatActivity.this,android.R.layout.simple_list_item_1,arrayList);
-//            listView.setAdapter(adapter);
         }
     }
 }
