@@ -38,10 +38,10 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        init();
+        begin();
     }
 
-    private void init(){
+    private void begin(){
         input_searchname = (EditText) findViewById(R.id.input_searchname);
         search_button = (Button) findViewById(R.id.searchbutton);
         listView = (ListView) findViewById(R.id.searchList);
@@ -55,24 +55,24 @@ public class SearchActivity extends AppCompatActivity {
                 arrayList = new ArrayList<String>();
                 hashMap_search.put("sessionid",session);
                 hashMap_search.put("keyword",input_searchname.getText().toString());
-                Retreiver_search retreiver_search = new Retreiver_search();
-                retreiver_search.execute();
+                Search search = new Search();
+                search.execute();
             }
         });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Retreiver_add retreiver_add = new Retreiver_add();
+                AddFriend addFriend = new AddFriend();
                 hashMap_add.put("sessionid",session);
                 hashMap_add.put("username",arrayList.get(position).toString());
-                retreiver_add.execute();
+                addFriend.execute();
             }
         });
 
     }
 
-    private class Retreiver_search extends AsyncTask<Void, Void, Void> {
+    private class Search extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -102,7 +102,7 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    private class Retreiver_add extends AsyncTask<Void, Void, Void> {
+    private class AddFriend extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {

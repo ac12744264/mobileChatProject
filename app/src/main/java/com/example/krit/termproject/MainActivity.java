@@ -20,29 +20,24 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     EditText editText_username, editText_password;
     Button button_login;
     String text;
     HashMap<String,String> hashMap = new HashMap<>();
     JSONObject jsonObject;
 
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
-
         setContentView(R.layout.activity_main);
         begin();
-
         if(pref.getString("username",null) != null){
             startActivity(new Intent(MainActivity.this,ContactActivity.class));
         }
-
     }
 
     @Override
